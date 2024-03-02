@@ -12,6 +12,7 @@ model Media {
   title         String
   size          String
   url           String
+  language      String   @default("en")
   hasTranscript Boolean  @default(false)
   hasSubtitle   Boolean  @default(false)
   createdAt     DateTime @default(now())

@@ -22,6 +22,7 @@ export async function createMedia(formData: FormData) {
         title: data.video.name,
         size: convertFileSizeToMb(data.video.size),
         url,
+        language: data.language,
       },
     });
   } catch (error) {
