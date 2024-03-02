@@ -32,6 +32,7 @@ export class StorageProvider {
           Bucket: env.BUCKET_MEDIA_NAME,
           Key: fileName,
           Body: Buffer.from(Body),
+          ACL: "public-read",
         })
       );
 
