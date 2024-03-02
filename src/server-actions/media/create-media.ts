@@ -1,5 +1,5 @@
 "use server";
 
-export async function uploadVideo(data: any) {
+export async function createMedia(data: any) {
   console.log("🚀 ~ data:", data);
 }
