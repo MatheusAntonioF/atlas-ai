@@ -31,44 +31,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const ACCEPTED_MEDIA_TYPES = ["video/mp3", "video/mp4"];
-
-const FormSchema = z.object({
-  video: z
-    .any()
-    .refine(
-      file => ACCEPTED_MEDIA_TYPES.includes(file?.type),
-      "Only .mp3, .mp4 formats are supported."
-    ),
-  language: z.string().min(2, {
-    message: "Language must be at least 2 characters",
-  }),
-});
-
-type FormData = z.infer<typeof FormSchema>;
+import { CreateMedia, CreateMediaFormSchema } from "@/types/create-media-type";
 
 type Props = {
   onCloseDialog: () => void;
 };
 
-export default function AddVideoModal({ onCloseDialog }: Props) {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+export function AddMediaModal({ onCloseDialog }: Props) {
+  const form = useForm<z.infer<typeof CreateMediaFormSchema>>({
+    resolver: zodResolver(CreateMediaFormSchema),
     defaultValues: {
       video: undefined,
       language: "pt-BR",
     },
   });
 
-  const onUploadVideo = async (data: FormData) => {
+  const onUploadVideo = async (data: CreateMedia) => {
     try {
       const formData = new FormData();
 
       formData.append("video", data.video);
       formData.append("language", data.language);
 
-      // await createMedia(formData);
+      /**
+       * Sending a plain object to the server action caused an internal next error
+       * Error: Only plain objects, and a few built-ins, can be passed to Server Actions. Classes or null prototypes are not supported.
+       */
+      await createMedia(formData);
 
       onCloseDialog();
     } catch (error) {

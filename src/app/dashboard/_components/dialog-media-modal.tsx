@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import AddVideoModal from "./add-media-modal";
+import { AddMediaModal } from "./add-media-modal";
 
 export function DialogMediaModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ export function DialogMediaModal() {
       <DialogTrigger asChild>
         <Button className="ml-auto h-8">Upload video</Button>
       </DialogTrigger>
-      <AddVideoModal onCloseDialog={onCloseDialog} />
+      <AddMediaModal onCloseDialog={onCloseDialog} />
     </Dialog>
   );
 }
