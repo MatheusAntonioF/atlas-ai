@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateMedia, CreateMediaFormSchema } from "@/types/create-media-type";
+import { LoadingIcon } from "@/assets/LoagingIcon";
 
 type Props = {
   onCloseDialog: () => void;
@@ -142,7 +143,16 @@ export function AddMediaModal({ onCloseDialog }: Props) {
             </div>
           </div>
           <DialogFooter className="flex p-6">
-            <Button className="ml-auto">Submit</Button>
+            <Button className="ml-auto">
+              {form.formState.isSubmitting ? (
+                <>
+                  <LoadingIcon />
+                  Processing...
+                </>
+              ) : (
+                "Submit"
+              )}
+            </Button>
           </DialogFooter>
         </form>
       </Form>

@@ -1,5 +1,6 @@
 "use client";
 
+import { convertFileSizeToMb } from "@/helpers/convert-file-size-to-mb";
 import { UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -32,7 +33,7 @@ export function DropzoneInput({ video, onVideoUpload }: Props) {
         <div className="flex justify-center items-center h-32">
           {video ? (
             <p className="text-sm text-gray-500 text-center">
-              {video.name} - {video.size / 1000000} MB
+              {video.name} - {convertFileSizeToMb(video.size)} MB
             </p>
           ) : isDragActive ? (
             <p className="text-sm text-gray-500 text-center">
