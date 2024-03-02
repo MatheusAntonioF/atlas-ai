@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Video {
+model Media {
   id            Int      @id @default(autoincrement())
   title         String
   size          String
