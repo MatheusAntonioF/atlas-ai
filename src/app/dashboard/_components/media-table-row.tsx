@@ -1,11 +1,13 @@
 "use client";
 
+import { formatSecondsToMinutes } from "@/helpers/format-seconds-to-minutes";
 import { Sparkles, MoreHorizontal, Trash } from "lucide-react";
+import Link from "next/link";
+import { Media } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { formatBytes } from "@/helpers/format-bytes";
-import { Media } from "@prisma/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 import { SyntheticEvent, useState } from "react";
-import { formatSecondsToMinutes } from "@/helpers/format-seconds-to-minutes";
 
 type Props = {
   media: Media;
@@ -22,6 +23,8 @@ type Props = {
 
 export function MediaTableRow({ media }: Props) {
   const [videoDuration, setVideoDuration] = useState(0);
+
+  const mediaHref = `/medias/${media.id}`;
 
   function handleLoadedMetadata(event: SyntheticEvent<HTMLVideoElement>) {
     setVideoDuration(event.currentTarget.duration);
@@ -56,16 +59,20 @@ export function MediaTableRow({ media }: Props) {
       <TableCell>
         <div className="flex items-center">
           <Progress value={50} className="w-[60%] h-2" />
-          <Button variant="outline" className="ml-2">
-            <Sparkles size={18} />
+          <Button asChild variant="link" className="ml-2">
+            <Link href={mediaHref}>
+              <Sparkles size={18} />
+            </Link>
           </Button>
         </div>
       </TableCell>
       <TableCell>
         <div className="flex items-center">
           <Progress value={50} className="w-[60%] h-2" />
-          <Button variant="outline" className="ml-2">
-            <Sparkles size={18} />
+          <Button asChild variant="link" className="ml-2">
+            <Link href={mediaHref}>
+              <Sparkles size={18} />
+            </Link>
           </Button>
         </div>
       </TableCell>
