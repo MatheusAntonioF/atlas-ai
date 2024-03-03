@@ -5,6 +5,9 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 import { randomUUID } from "node:crypto";
+import { createWriteStream } from "node:fs";
+import { join } from "node:path";
+import { Readable } from "node:stream";
 
 export class StorageProvider {
   private client: S3Client;
@@ -42,6 +45,36 @@ export class StorageProvider {
     } catch (error) {
       console.error("Error uploading file to S3 - ", error);
       throw new Error("Error uploading file to S3");
+    }
+  }
+
+  async downloadFile(key: string): Promise<string | undefined> {
+    try {
+      const response = await this.client.send(
+        new GetObjectCommand({
+          Bucket: env.BUCKET_MEDIA_NAME,
+          Key: key,
+        })
+      );
+
+      if (!response.Body) return undefined;
+
+      const readable = new Readable({
+        async read() {
+          const chunks = await response.Body?.transformToByteArray();
+          this.push(Buffer.from(chunks ?? []));
+          this.push(null);
+        },
+      });
+
+      const filePath = join(process.cwd(), "tmp", key);
+      const fileWriteStream = createWriteStream(filePath);
+      readable.pipe(fileWriteStream);
+
+      return filePath;
+    } catch (error) {
+      console.error("Error downloading file from S3 - ", error);
+      throw new Error("Error downloading file from S3");
     }
   }
 }
