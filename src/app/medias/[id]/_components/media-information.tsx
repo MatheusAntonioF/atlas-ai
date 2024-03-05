@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { generateTranscription } from "@/server-actions/media/whisper-ai/generate-transcription";
+import { convertVideoToWav } from "@/lib/ffmpeg";
 import { Media } from "@prisma/client";
 import { Bot, Captions } from "lucide-react";
 import { toast } from "sonner";
@@ -12,11 +12,11 @@ type Props = {
 };
 
 export function MediaInformation({ media }: Props) {
-  const onGenerateTranscription = () => {
+  const onGenerateTranscription = async () => {
     try {
       if (!media) return;
 
-      generateTranscription(media.id);
+      const response = await convertVideoToWav(media.url);
     } catch (error) {
       toast.error(
         "An error occurred while generating the transcription! Please try again"

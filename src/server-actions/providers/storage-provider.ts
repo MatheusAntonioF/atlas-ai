@@ -59,19 +59,18 @@ export class StorageProvider {
 
       if (!response.Body) return undefined;
 
-      const readable = new Readable({
-        async read() {
-          const chunks = await response.Body?.transformToByteArray();
-          this.push(Buffer.from(chunks ?? []));
-          this.push(null);
-        },
-      });
+      const outputPath = join(process.cwd(), "tmp", key);
 
-      const filePath = join(process.cwd(), "tmp", key);
-      const fileWriteStream = createWriteStream(filePath);
-      readable.pipe(fileWriteStream);
+      const writeStream = createWriteStream(outputPath);
 
-      return filePath;
+      // use stream to parse the response.Body
+      Readable.from([response.Body.transformToByteArray()]).pipe(writeStream);
+
+      await new Promise(resolve => writeStream.on("finish", resolve));
+
+      console.log("🚀 ~ outputPath:", outputPath);
+
+      return "";
     } catch (error) {
       console.error("Error downloading file from S3 - ", error);
       throw new Error("Error downloading file from S3");
