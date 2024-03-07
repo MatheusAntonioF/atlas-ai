@@ -8,13 +8,16 @@ datasource db {
 }
 
 model Media {
-  id            String   @id @default(uuid())
-  title         String
-  size          String
-  url           String
-  language      String   @default("en")
-  hasTranscript Boolean  @default(false)
-  hasSubtitle   Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                      String   @id @default(uuid())
+  title                   String
+  size                    String
+  url                     String
+  url_transcript          String?
+  url_subtitle            String?
+  url_media_with_subtitle String?
+  language                String   @default("en")
+  hasTranscript           Boolean  @default(false)
+  hasSubtitle             Boolean  @default(false)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }

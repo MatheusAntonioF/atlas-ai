@@ -20,9 +20,13 @@ export async function convertVideoToWav(fileUrl: string) {
 
   await ffmpeg.writeFile(fileName, await fetchFile(fileUrl));
 
+  ffmpeg.on("log", data => {
+    console.log("ffmpeg log data:", data);
+  });
+
   const outputFileName = `${fileName}.wav`;
 
-  await ffmpeg.exec(["-i", fileName, outputFileName]);
+  await ffmpeg.exec(["-i", fileName, "-ar", "16000", outputFileName]);
 
   const data = (await ffmpeg.readFile(outputFileName)) as Uint8Array;
 
