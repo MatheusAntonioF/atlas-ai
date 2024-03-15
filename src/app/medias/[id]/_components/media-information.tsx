@@ -7,7 +7,7 @@ import { attachSubtitleToVideo, convertVideoToWav } from "@/lib/ffmpeg";
 import { processMediaWithAI } from "@/server-actions/media/openai/process-media-with-ai";
 import { OpenaiVerboseJsonResponse } from "@/types/openai-verbose-json-response";
 import { Media } from "@prisma/client";
-import { Bot, Captions } from "lucide-react";
+import { Bot } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { SubtitleList } from "./subtitle-list";
@@ -42,13 +42,11 @@ export function MediaInformation({ media }: Props) {
             const formData = new FormData();
 
             formData.append("file", audio);
-            formData.append("mediaId", media.id);
 
             const response = await processMediaWithAI(formData);
 
             setSubtitle(response);
         } catch (error) {
-            console.log("🚀 ~ error:", error);
             toast.error(
                 "An error occurred while generating the transcription! Please try again"
             );
