@@ -1,4 +1,7 @@
 "use client";
+import { Bot } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 import { LoadingIcon } from "@/assets/LoagingIcon";
 import { Button } from "@/components/ui/button";
@@ -7,14 +10,17 @@ import { attachSubtitleToVideo, convertVideoToWav } from "@/lib/ffmpeg";
 import { processMediaWithAI } from "@/server-actions/media/openai/process-media-with-ai";
 import { OpenaiVerboseJsonResponse } from "@/types/openai-verbose-json-response";
 import { Media } from "@prisma/client";
-import { Bot } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import { SubtitleList } from "./subtitle-list";
 import {
     uploadMediaFileWithSubtitle,
     uploadMediaSubtitle,
 } from "@/server-actions/media/upload-media-subtitle";
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "@/components/ui/resizable";
+
+import { SubtitleList } from "./subtitle-list";
 
 type Props = {
     media: Media;
@@ -92,8 +98,11 @@ export function MediaInformation({ media }: Props) {
     };
 
     return (
-        <div className="flex w-full gap-8 mt-10 grid-col">
-            <div className="rounded-md border p-4 h-auto flex-grow">
+        <ResizablePanelGroup
+            direction="horizontal"
+            className="flex flex-col w-full gap-8 mt-10 min-h-[400px] rounded-lg border"
+        >
+            <ResizablePanel className="p-4 h-full" defaultSize={40}>
                 <Button
                     className="flex gap-2 mb-4"
                     onClick={onGenerateTranscription}
@@ -115,17 +124,19 @@ export function MediaInformation({ media }: Props) {
                         </Button>
                     </>
                 )}
-            </div>
-            <div className="rounded-md border p-4 h-80 flex-grow">
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel className="p-4 h-full" defaultSize={60}>
                 {videoWithSubtitle && (
                     <video
-                        src={videoWithSubtitle}
+                        className="aspect-video rounded-md w-full h-full"
                         controls
-                        className="pointer-events-none aspect-video rounded-md w-full h-full"
-                        preload="metadata"
-                    />
+                    >
+                        <source src={videoWithSubtitle} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
                 )}
-            </div>
-        </div>
+            </ResizablePanel>
+        </ResizablePanelGroup>
     );
 }
