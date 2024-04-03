@@ -3,10 +3,11 @@
 import Openai from "openai";
 import { env } from "@/lib/env";
 import { OpenaiVerboseJsonResponse } from "@/types/openai-verbose-json-response";
+import { OPENAI_MOCK_RESPONSE } from "./mock";
 
 export async function processMediaWithAI(formData: FormData) {
     try {
-        const mediaId = formData.get("mediaId") as string;
+        return OPENAI_MOCK_RESPONSE;
 
         const subtitle = await generateSubtitle(formData);
 

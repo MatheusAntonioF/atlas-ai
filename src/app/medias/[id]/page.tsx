@@ -1,7 +1,10 @@
-import { getMediaById } from "@/server-actions/media/get-media";
-import { MediaInformation } from "./_components/media-information";
 import Link from "next/link";
 import { ChevronLeftIcon } from "lucide-react";
+import { Suspense } from "react";
+import {
+    WrapperMediaInformation,
+    WrapperMediaInformationSkeleton,
+} from "./_components/wrapper-media-information";
 
 type Props = {
     params: {
@@ -10,8 +13,6 @@ type Props = {
 };
 
 export default async function Page({ params: { id: mediaId } }: Props) {
-    const media = await getMediaById(mediaId);
-
     return (
         <div className="flex flex-col w-full">
             <Link
@@ -21,14 +22,9 @@ export default async function Page({ params: { id: mediaId } }: Props) {
                 <ChevronLeftIcon /> Go back
             </Link>
 
-            {media && (
-                <>
-                    <h2 className="scroll-m-20 my-2 text-3xl font-semibold tracking-tight">
-                        {media.title}
-                    </h2>
-                    <MediaInformation media={media} />
-                </>
-            )}
+            <Suspense fallback={<WrapperMediaInformationSkeleton />}>
+                <WrapperMediaInformation mediaId={mediaId} />
+            </Suspense>
         </div>
     );
 }

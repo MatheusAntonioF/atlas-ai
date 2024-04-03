@@ -1,6 +1,6 @@
 "use client";
 import { Bot } from "lucide-react";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import { LoadingIcon } from "@/assets/LoagingIcon";
@@ -21,13 +21,14 @@ import {
 } from "@/components/ui/resizable";
 
 import { SubtitleList } from "./subtitle-list";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
     media: Media;
 };
 
 export function MediaInformation({ media }: Props) {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, startTransition] = useTransition();
     const [isLoadingAttachSub, setIsLoadingAttachSub] = useState(false);
     const [videoWithSubtitle, setVideoWithSubtitle] = useState<string | null>(
         null
@@ -37,28 +38,27 @@ export function MediaInformation({ media }: Props) {
     );
 
     const onGenerateTranscription = async () => {
-        try {
-            setIsLoading(true);
-            if (!media) return;
+        startTransition(async () => {
+            try {
+                if (!media) return;
 
-            const audio = await convertVideoToWav(media.url);
+                const audio = await convertVideoToWav(media.url);
 
-            if (!audio) throw new Error("Error converting video to audio");
+                if (!audio) throw new Error("Error converting video to audio");
 
-            const formData = new FormData();
+                const formData = new FormData();
 
-            formData.append("file", audio);
+                formData.append("file", audio);
 
-            const response = await processMediaWithAI(formData);
+                const response = await processMediaWithAI(formData);
 
-            setSubtitle(response);
-        } catch (error) {
-            toast.error(
-                "An error occurred while generating the transcription! Please try again"
-            );
-        } finally {
-            setIsLoading(false);
-        }
+                setSubtitle(response);
+            } catch (error) {
+                toast.error(
+                    "An error occurred while generating the transcription! Please try again"
+                );
+            }
+        });
     };
 
     const onAttachSubtitleToVideo = async () => {
@@ -127,16 +127,23 @@ export function MediaInformation({ media }: Props) {
             </ResizablePanel>
             <ResizableHandle withHandle />
             <ResizablePanel className="p-4 h-full" defaultSize={60}>
-                {videoWithSubtitle && (
-                    <video
-                        className="aspect-video rounded-md w-full h-full"
-                        controls
-                    >
-                        <source src={videoWithSubtitle} type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>
-                )}
+                <video
+                    className="aspect-video rounded-md w-full h-full"
+                    controls
+                >
+                    <source
+                        src={videoWithSubtitle || media.url}
+                        type="video/mp4"
+                    />
+                    Your browser does not support the video tag.
+                </video>
             </ResizablePanel>
         </ResizablePanelGroup>
+    );
+}
+
+export function MediaInformationSkeleton() {
+    return (
+        <Skeleton className="flex flex-col w-full gap-8 mt-10 min-h-[400px] rounded-lg border" />
     );
 }
