@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const envSchema = z.object({
     DATABASE_URL: z.string(),
@@ -8,6 +8,12 @@ const envSchema = z.object({
     AWS_SECRET_ACCESS_KEY_ID: z.string(),
     OPENAI_KEY: z.string(),
     OPENAI_ORGANIZATION: z.string(),
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string(),
+    CLERK_SECRET_KEY: z.string(),
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string(),
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string(),
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string(),
+    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
