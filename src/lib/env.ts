@@ -14,6 +14,7 @@ const envSchema = z.object({
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string(),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string(),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string(),
+    CLERK_WEBHOOK_SECRET: z.string(),
 });
 
 export const env = envSchema.parse(process.env);
