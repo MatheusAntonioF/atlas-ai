@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id          String   @id @default(uuid())
+  external_id String
+  first_name  String
+  last_name   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  medias      Media[]
+}
+
 model Media {
   id                      String   @id @default(uuid())
   title                   String
@@ -20,4 +30,6 @@ model Media {
   hasSubtitle             Boolean  @default(false)
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
+  User                    User?    @relation(fields: [userId], references: [id])
+  userId                  String?
 }
