@@ -1,9 +1,9 @@
-import { DialogMediaModal } from "./_components/dialog-media-modal";
+import { DialogMediaModal } from './_components/dialog-media-modal';
 import {
     WrapperMediaTable,
     WrapperMediaTableSkeleton,
-} from "./_components/wrapper-media-table";
-import { Suspense } from "react";
+} from './_components/wrapper-media-table';
+import { Suspense } from 'react';
 
 export default function Page() {
     return (
