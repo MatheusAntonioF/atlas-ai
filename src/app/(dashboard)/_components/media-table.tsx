@@ -1,6 +1,6 @@
-"use client";
-import { Media } from "@prisma/client";
-import { UploadCloud, AudioWaveform } from "lucide-react";
+'use client';
+import { Media } from '@prisma/client';
+import { UploadCloud, AudioWaveform } from 'lucide-react';
 
 import {
     Table,
@@ -8,10 +8,10 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
-import { MediaTableRow } from "./media-table-row";
-import { Skeleton } from "@/components/ui/skeleton";
+import { MediaTableRow } from './media-table-row';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type Props = {
     medias: Media[];
@@ -26,11 +26,7 @@ export function MediaTable({ medias }: Props) {
                         <TableHead className="w-[148px]"></TableHead>
                         <TableHead>Information</TableHead>
                         <TableHead>Metadata</TableHead>
-                        <TableHead>
-                            <div className="flex items-center gap-2">
-                                <UploadCloud size={16} /> Transcription
-                            </div>
-                        </TableHead>
+
                         <TableHead>
                             <div className="flex items-center gap-2">
                                 <AudioWaveform size={16} /> Subtitles

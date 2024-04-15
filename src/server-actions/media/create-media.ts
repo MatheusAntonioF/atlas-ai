@@ -11,11 +11,9 @@ import { convertFileSizeToMb } from '@/helpers/convert-file-size-to-mb';
 export async function createMedia(formData: FormData) {
     try {
         const video = formData.get('video') as File;
-        const language = formData.get('language') as string;
 
         const data = CreateMediaFormSchema.parse({
             video,
-            language,
         });
 
         const { userId } = auth();
@@ -41,7 +39,6 @@ export async function createMedia(formData: FormData) {
                 title: data.video.name,
                 size: convertFileSizeToMb(data.video.size),
                 url,
-                language: data.language,
                 userId: foundUser.id,
             },
         });

@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { formatSecondsToMinutes } from "@/helpers/format-seconds-to-minutes";
-import { Sparkles, MoreHorizontal, Trash } from "lucide-react";
-import Link from "next/link";
-import { Media } from "@prisma/client";
+import { formatSecondsToMinutes } from '@/helpers/format-seconds-to-minutes';
+import { Sparkles, MoreHorizontal, Trash } from 'lucide-react';
+import Link from 'next/link';
+import { Media } from '@prisma/client';
 
-import { Button } from "@/components/ui/button";
-import { TableCell, TableRow } from "@/components/ui/table";
-import { formatBytes } from "@/helpers/format-bytes";
+import { Button } from '@/components/ui/button';
+import { TableCell, TableRow } from '@/components/ui/table';
+import { formatBytes } from '@/helpers/format-bytes';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuLabel,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Progress } from "@/components/ui/progress";
-import { SyntheticEvent, useState } from "react";
+} from '@/components/ui/dropdown-menu';
+import { Progress } from '@/components/ui/progress';
+import { SyntheticEvent, useState } from 'react';
 
 type Props = {
     media: Media;
@@ -27,7 +27,6 @@ export function MediaTableRow({ media }: Props) {
     const mediaHref = `/medias/${media.id}`;
 
     function handleLoadedMetadata(event: SyntheticEvent<HTMLVideoElement>) {
-        console.log("🚀 ~ event.currentTarget:", event.currentTarget);
         setVideoDuration(event.currentTarget.duration);
     }
 
@@ -48,7 +47,6 @@ export function MediaTableRow({ media }: Props) {
             <TableCell>
                 <div className="flex flex-col">
                     <p>{media.title}</p>
-                    <p>{media.language}</p>
                 </div>
             </TableCell>
             <TableCell>
@@ -64,24 +62,15 @@ export function MediaTableRow({ media }: Props) {
             </TableCell>
             <TableCell>
                 <div className="flex items-center">
-                    <Progress value={50} className="w-[60%] h-2" />
-                    <Button asChild variant="link" className="ml-2">
-                        <Link href={mediaHref}>
+                    <Button asChild variant="secondary" className="ml-2">
+                        <Link href={mediaHref} className="flex gap-2">
+                            <span>AI</span>
                             <Sparkles size={18} />
                         </Link>
                     </Button>
                 </div>
             </TableCell>
-            <TableCell>
-                <div className="flex items-center">
-                    <Progress value={50} className="w-[60%] h-2" />
-                    <Button asChild variant="link" className="ml-2">
-                        <Link href={mediaHref}>
-                            <Sparkles size={18} />
-                        </Link>
-                    </Button>
-                </div>
-            </TableCell>
+
             <TableCell className="text-right">
                 <DropdownMenu>
                     <DropdownMenuTrigger>
