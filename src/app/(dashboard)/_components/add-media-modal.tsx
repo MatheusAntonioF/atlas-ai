@@ -24,13 +24,6 @@ import {
 } from '@/components/ui/form';
 import { createMedia } from '@/server-actions/media/create-media';
 import { DropzoneInput } from './dropzone-input';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select';
 import { CreateMedia, CreateMediaFormSchema } from '@/types/create-media-type';
 import { LoadingIcon } from '@/assets/LoagingIcon';
 
@@ -87,7 +80,7 @@ export function AddMediaModal({ onCloseDialog }: Props) {
                                 name="video"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>Video</FormLabel>
                                         <FormControl>
                                             <DropzoneInput
                                                 video={field.value}
