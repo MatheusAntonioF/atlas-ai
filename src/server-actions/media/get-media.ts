@@ -18,7 +18,6 @@ export async function listMedia(userExternalId: string): Promise<Media[]> {
                 userId: foundUser.id,
             },
         });
-        console.log('🚀 ~ medias:', medias);
 
         return medias;
     } catch (error) {

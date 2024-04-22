@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { ChevronLeftIcon } from "lucide-react";
-import { Suspense } from "react";
+import Link from 'next/link';
+import { ChevronLeftIcon } from 'lucide-react';
+import { Suspense } from 'react';
 import {
     WrapperMediaInformation,
     WrapperMediaInformationSkeleton,
-} from "./_components/wrapper-media-information";
+} from './_components/wrapper-media-information';
 
 type Props = {
     params: {
@@ -17,7 +17,7 @@ export default async function Page({ params: { id: mediaId } }: Props) {
         <div className="flex flex-col w-full">
             <Link
                 className="flex items-center gap-2 mb-8 scale-100 hover:scale-105 transition"
-                href="/dashboard"
+                href="/"
             >
                 <ChevronLeftIcon /> Go back
             </Link>

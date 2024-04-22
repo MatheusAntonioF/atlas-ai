@@ -1,14 +1,14 @@
-import { getFileName } from "@/helpers/get-file-name";
-import { env } from "@/lib/env";
+import { getFileName } from '@/helpers/get-file-name';
+import { env } from '@/lib/env';
 import {
     S3Client,
     PutObjectCommand,
     GetObjectCommand,
-} from "@aws-sdk/client-s3";
-import { randomUUID } from "node:crypto";
-import { createWriteStream } from "node:fs";
-import { join } from "node:path";
-import { Readable } from "node:stream";
+} from '@aws-sdk/client-s3';
+import { randomUUID } from 'node:crypto';
+import { createWriteStream } from 'node:fs';
+import { join } from 'node:path';
+import { Readable } from 'node:stream';
 
 export class StorageProvider {
     private client: S3Client;
@@ -24,10 +24,12 @@ export class StorageProvider {
     }
 
     async uploadFile(file: File): Promise<string> {
+        console.log('🚀 ~ file:', file);
         try {
-            const fileExtension = file.type.split("/")[1];
+            const fileExtension = file.type.split('/')[1];
 
             const originalFileName = getFileName(file.name);
+            console.log('🚀 ~ originalFileName:', originalFileName);
 
             const fileName = `${originalFileName}_${randomUUID()}.${fileExtension}`;
 
@@ -38,7 +40,7 @@ export class StorageProvider {
                     Bucket: env.BUCKET_MEDIA_NAME,
                     Key: fileName,
                     Body: Buffer.from(Body),
-                    ACL: "public-read",
+                    ACL: 'public-read',
                 })
             );
 
@@ -46,8 +48,8 @@ export class StorageProvider {
 
             return url;
         } catch (error) {
-            console.error("Error uploading file to S3 - ", error);
-            throw new Error("Error uploading file to S3");
+            console.error('Error uploading file to S3 - ', error);
+            throw new Error('Error uploading file to S3');
         }
     }
 }

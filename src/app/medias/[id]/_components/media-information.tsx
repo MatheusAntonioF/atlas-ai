@@ -29,7 +29,7 @@ type Props = {
 
 export function MediaInformation({ media }: Props) {
     const [isLoading, startTransition] = useTransition();
-    const [isLoadingAttachSub, setIsLoadingAttachSub] = useState(false);
+    const [isLoadingAttachSub, startTransitionForAttachSub] = useTransition();
     const [videoWithSubtitle, setVideoWithSubtitle] = useState<string | null>(
         null
     );
@@ -64,43 +64,40 @@ export function MediaInformation({ media }: Props) {
     const onAttachSubtitleToVideo = async (
         updatedSubtitle: OpenaiVerboseJsonResponse
     ) => {
-        try {
-            setIsLoadingAttachSub(true);
-            console.log('🚀 ~ updatedSubtitle:', updatedSubtitle);
+        startTransitionForAttachSub(async () => {
+            try {
+                const subtitleUrl = await uploadMediaSubtitle(
+                    media.id,
+                    updatedSubtitle || subtitle
+                );
 
-            const subtitleUrl = await uploadMediaSubtitle(
-                media.id,
-                updatedSubtitle || subtitle
-            );
+                const fileWithSubtitle = await attachSubtitleToVideo(
+                    media.url,
+                    subtitleUrl
+                );
 
-            const fileWithSubtitle = await attachSubtitleToVideo(
-                media.url,
-                subtitleUrl
-            );
+                if (!fileWithSubtitle) {
+                    throw new Error('Error attaching subtitle to the video');
+                }
 
-            if (!fileWithSubtitle) {
-                throw new Error('Error attaching subtitle to the video');
+                const formData = new FormData();
+
+                formData.append('file', fileWithSubtitle);
+                formData.append('mediaId', media.id);
+
+                const videoWithSubtitleUrl = await uploadMediaFileWithSubtitle(
+                    formData
+                );
+
+                setVideoWithSubtitle(videoWithSubtitleUrl);
+
+                toast('Subtitle attached to the video');
+            } catch (error) {
+                toast(
+                    'An error occurred while attaching the subtitle! Please try again'
+                );
             }
-
-            const formData = new FormData();
-
-            formData.append('file', fileWithSubtitle);
-            formData.append('mediaId', media.id);
-
-            const videoWithSubtitleUrl = await uploadMediaFileWithSubtitle(
-                formData
-            );
-
-            setVideoWithSubtitle(videoWithSubtitleUrl);
-
-            toast('Subtitle attached to the video');
-        } catch (error) {
-            toast(
-                'An error occurred while attaching the subtitle! Please try again'
-            );
-        } finally {
-            setIsLoadingAttachSub(false);
-        }
+        });
     };
 
     return (

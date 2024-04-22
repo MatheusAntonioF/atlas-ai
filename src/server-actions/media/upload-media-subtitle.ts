@@ -1,18 +1,16 @@
-"use server";
-import { randomUUID } from "crypto";
-
-import { OpenaiVerboseJsonResponse } from "@/types/openai-verbose-json-response";
-import { stringToFile } from "@/helpers/string-to-file";
-import { jsonToSrt } from "@/helpers/json-to-srt";
-import { prisma } from "@/lib/prisma";
-import { StorageProvider } from "../providers/storage-provider";
+'use server';
+import { OpenaiVerboseJsonResponse } from '@/types/openai-verbose-json-response';
+import { stringToFile } from '@/helpers/string-to-file';
+import { jsonToSrt } from '@/helpers/json-to-srt';
+import { prisma } from '@/lib/prisma';
+import { StorageProvider } from '../providers/storage-provider';
 
 export async function uploadMediaSubtitle(
     mediaId: string,
     subtitle: OpenaiVerboseJsonResponse
 ) {
     try {
-        const mediaTitle = "video";
+        const mediaTitle = 'video';
 
         const convertedFileToSrt = jsonToSrt(subtitle.segments);
 
@@ -20,15 +18,15 @@ export async function uploadMediaSubtitle(
 
         const file = stringToFile({
             content: convertedFileToSrt,
-            fileName: `${mediaTitle}-subtitle`,
-            fileType: "text/srt",
+            fileName: `${mediaTitle}-subtitle.srt`,
+            fileType: 'text/srt',
         });
 
-        console.log("converted json to srt");
+        console.log('converted json to srt', JSON.stringify(file, null, 2));
 
         const uploadedSubtitleUrl = await storageProvider.uploadFile(file);
 
-        console.log("uploaded file to s3");
+        console.log('uploaded file to s3');
 
         await prisma.media.update({
             where: {
@@ -39,19 +37,19 @@ export async function uploadMediaSubtitle(
             },
         });
 
-        console.log("updated subtitle url on database");
+        console.log('updated subtitle url on database');
 
         return uploadedSubtitleUrl;
     } catch (error) {
-        console.log("Error uploading subtitle - ", error);
-        throw new Error("Error uploading subtitle");
+        console.log('Error uploading subtitle - ', error);
+        throw new Error('Error uploading subtitle');
     }
 }
 
 export async function uploadMediaFileWithSubtitle(formData: FormData) {
     try {
-        const file = formData.get("file") as File;
-        const mediaId = formData.get("mediaId") as string;
+        const file = formData.get('file') as File;
+        const mediaId = formData.get('mediaId') as string;
 
         const storageProvider = new StorageProvider();
 
@@ -59,7 +57,7 @@ export async function uploadMediaFileWithSubtitle(formData: FormData) {
             file
         );
 
-        console.log("uploaded file to s3");
+        console.log('uploaded file to s3');
 
         await prisma.media.update({
             where: {
@@ -70,11 +68,11 @@ export async function uploadMediaFileWithSubtitle(formData: FormData) {
             },
         });
 
-        console.log("updated subtitle url on database");
+        console.log('updated subtitle url on database');
 
         return uploadedMediaWithSubtitle;
     } catch (error) {
-        console.log("Error uploading subtitle - ", error);
-        throw new Error("Error uploading subtitle");
+        console.log('Error uploading subtitle - ', error);
+        throw new Error('Error uploading subtitle');
     }
 }
